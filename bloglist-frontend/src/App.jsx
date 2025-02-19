@@ -3,6 +3,49 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
+const msg = {
+  color: 'green',
+  background: 'lightgrey',
+  fontSize: 18,
+  borderStyle: 'solid',
+  borderRadius: 5,
+  padding: 10,
+  marginBottom: 10
+}
+const error = {
+  color: 'red',
+  background: 'lightgrey',
+  fontSize: 18,
+  borderStyle: 'solid',
+  borderRadius: 5,
+  padding: 10,
+  marginBottom: 10
+}
+
+
+const Notification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div style={msg}>
+      {message}
+    </div>
+  )
+}
+
+const ErrorNotification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+  return (
+    <div style={error}>
+      {message}
+    </div>
+  )
+}
+
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('') 
@@ -11,6 +54,8 @@ const App = () => {
   const [title, setTitle] = useState('') 
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
+  const [newMessage, setMessage] = useState(null)
+  const [newErrorMessage, setErrorMessage] = useState(null)
 
 //Hooks
 
@@ -68,9 +113,13 @@ const App = () => {
     setTitle('')
     setAuthor('')
     setUrl('')
+    setMessage(`a new blog ${blog.title} by ${blog.author} added`)
+    setTimeout(() => {
+      setMessage(null)
+    }, 5000)
   }
    catch (exception) {
-    setErrorMessage('wrong credentials')
+    setErrorMessage(`wrong credentials`)
     setTimeout(() => {
       setErrorMessage(null)
     }, 5000)
@@ -115,6 +164,7 @@ const blogForm = () => (
   if (user === null) {
   return( 
     <div>
+<ErrorNotification message={newErrorMessage} />
 
       <h2>Login</h2>
       <form onSubmit={handleLogin}>
@@ -143,6 +193,7 @@ const blogForm = () => (
   return(
       <div>
       <h2>blogs</h2>
+      <Notification message={newMessage} />
       <div style={{ display: 'flex', alignItems: 'center' }}>
       <p>{user.name} logged in</p>
       <button onClick={() => {setUser(null)
