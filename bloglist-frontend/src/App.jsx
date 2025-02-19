@@ -12,11 +12,29 @@ const App = () => {
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
 
+//Hooks
+
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
     )  
   }, [])
+
+  useEffect(() => {
+      keepLogged()
+  }, [])
+
+
+//Handlers
+
+  const keepLogged = async () => { 
+  const credentialsJson = window.localStorage.getItem('loggedBlogappUser')
+  if (credentialsJson){
+    const decodedCredentials = JSON.parse(credentialsJson)
+    blogService.setToken(decodedCredentials.token)
+    setUser(decodedCredentials)
+  }
+}
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -40,33 +58,52 @@ const App = () => {
     }
   }
 
+  const sendBlog = async (event) => {
+    event.preventDefault()
+    try {
+    const blog = await blogService.create({
+      title: title, author: author,url: url
+    })
+    setBlogs(blogs.concat(newBlog))
+    setTitle('')
+    setAuthor('')
+    setUrl('')
+  }
+   catch (exception) {
+    setErrorMessage('wrong credentials')
+    setTimeout(() => {
+      setErrorMessage(null)
+    }, 5000)
+  }
+  }
+
 
 const blogForm = () => (
-  <form onSubmit={handleLogin}>
+  <form onSubmit={sendBlog}>
   <div>
   title
     <input
     type="text"
-    value={username}
-    name="Username"
+    value={title}
+    name="Title"
     onChange={({ target }) => setTitle(target.value)}
   />
 </div>
 <div>
   author
     <input
-    type="password"
-    value={password}
-    name="Password"
+    type="text"
+    value={author}
+    name="Author"
     onChange={({ target }) => setAuthor(target.value)}
   />
 </div>
 <div>
   url
     <input
-    type="password"
-    value={password}
-    name="Password"
+    type="text"
+    value={url}
+    name="Url"
     onChange={({ target }) => setUrl(target.value)}
   />
 </div>
@@ -74,7 +111,8 @@ const blogForm = () => (
 </form>
 )
 
-if (user === null) {
+//Render
+  if (user === null) {
   return( 
     <div>
 
