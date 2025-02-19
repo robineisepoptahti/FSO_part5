@@ -64,7 +64,7 @@ const App = () => {
     const blog = await blogService.create({
       title: title, author: author,url: url
     })
-    setBlogs(blogs.concat(newBlog))
+    setBlogs(blogs.concat(blog))
     setTitle('')
     setAuthor('')
     setUrl('')
