@@ -114,15 +114,29 @@ useEffect(() => {
 
 const removeBlog = async (blog) => {
   try{
+    if (blog.user.username !== user.username) {
+      setErrorMessage('Only the user can remove blog')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+      return
+    }
+  else{
   if (window.confirm(`remove blog ${blog.title} by ${blog.author}`)) {
   const response = await blogService.remove(blog.id)
   if (response.status === 204) {
   setBlogs(blogs.filter(blogsInList => blog.id !== blogsInList.id))
   console.log("Got here!")
   }}
+  if (response.status === 401) {
+    setErrorMessage('Unauthorized')
+    setTimeout(() => {
+      setErrorMessage(null)
+    }, 5000)
+  }}
 }
   catch (exception) {
-  setErrorMessage('Only the user can remove blog')
+  setErrorMessage('failed removing the blog')
   setTimeout(() => {
     setErrorMessage(null)
   }, 5000)
@@ -170,6 +184,7 @@ const removeBlog = async (blog) => {
   return(
       <div>
       <h2>blogs</h2>
+      <ErrorNotification message={newErrorMessage} />
       <Notification message={newMessage} />
       <div style={{ display: 'flex', alignItems: 'center' }}>
       <p>{user.name} logged in</p>
