@@ -61,13 +61,12 @@ const App = () => {
   const blogFormRef = useRef()
 //Hooks
 
-  useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )  
-  }, [])
-
-  useEffect(() => {
+useEffect(() => {
+  const fetchBlogs = async () => {
+    const blogs = await blogService.getAll()
+    setBlogs(blogs)
+  }
+  fetchBlogs()
       keepLogged()
   }, [])
 
@@ -111,6 +110,27 @@ const App = () => {
       setBlogs(blogs.map(blog => blog.id === updatedBlog.id ? updatedBlog : blog))
   }
 
+
+
+const removeBlog = async (blog) => {
+  try{
+  if (window.confirm(`remove blog ${blog.title} by ${blog.author}`)) {
+  const response = await blogService.remove(blog.id)
+  if (response.status === 204) {
+  setBlogs(blogs.filter(blogsInList => blog.id !== blogsInList.id))
+  console.log("Got here!")
+  }}
+}
+  catch (exception) {
+  setErrorMessage('Only the user can remove blog')
+  setTimeout(() => {
+    setErrorMessage(null)
+  }, 5000)
+}
+}
+
+
+
   const sendBlog = async ({author, title, url}) => {
     try {
     const blog = await blogService.create({
@@ -129,6 +149,7 @@ const App = () => {
     }, 5000)
   }
   }
+
 
 //Render
   if (user === null) {
@@ -163,7 +184,7 @@ const App = () => {
           />
           </Togglable>
       {blogs.sort((a, b) => b.likes - a.likes).map(blog =>
-        <Blog key={blog.id} blog={blog} updateLikes={updateLikes}/>
+        <Blog key={blog.id} blog={blog} updateLikes={updateLikes} removeBlog={removeBlog}/>
       )}
     </div>)
 }
