@@ -1,11 +1,12 @@
+import PropTypes from 'prop-types'
 import { useState } from 'react'
-const BlogForm = ({     
+const BlogForm = ({
   handleSubmit
 }) => {
-  const [title, setTitle] = useState('') 
+  const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
-  
+
   const onSubmit = (event) => {
     event.preventDefault()
     handleSubmit({ title, author, url })
@@ -17,41 +18,45 @@ const BlogForm = ({
 
   return (
     <div>
-  <div>
-    <form onSubmit={onSubmit}>
-    <div>
+      <div>
+        <form onSubmit={onSubmit}>
+          <div>
     title
-      <input
-      type="text"
-      value={title}
-      name="Title"
-      onChange={(event) => setTitle(event.target.value)}
-    />
-  </div>
-  <div>
+            <input
+              type="text"
+              value={title}
+              name="Title"
+              onChange={(event) => setTitle(event.target.value)}
+            />
+          </div>
+          <div>
     author
-      <input
-      type="text"
-      value={author}
-      name="Author"
-      onChange={(event) => setAuthor(event.target.value)}
-    />
-  </div>
-  <div>
+            <input
+              type="text"
+              value={author}
+              name="Author"
+              onChange={(event) => setAuthor(event.target.value)}
+            />
+          </div>
+          <div>
     url
-      <input
-      type="text"
-      value={url}
-      name="Url"
-      onChange={(event) => setUrl(event.target.value)}
-    />
-  </div>
-  <button>submit</button>
-  </form>
+            <input
+              type="text"
+              value={url}
+              name="Url"
+              onChange={(event) => setUrl(event.target.value)}
+            />
+          </div>
+          <button>submit</button>
+        </form>
 
-  </div>
-  </div>
+      </div>
+    </div>
   )
-  }
+}
 
-  export default BlogForm
+BlogForm.propTypes = {
+  handleSubmit: PropTypes.func.isRequired,
+}
+
+export default BlogForm
