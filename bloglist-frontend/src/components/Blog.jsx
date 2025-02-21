@@ -1,6 +1,10 @@
 import { useState } from 'react'
+import blogService from '../services/blogs'
+
 const Blog = ({ blog }) => {
   const [visible, setVisible] = useState(false)
+  const [likes, setLikes] = useState(blog.likes)
+
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -10,6 +14,12 @@ const Blog = ({ blog }) => {
   }
  const toggle = () => {
     setVisible(!visible)
+  }
+
+  const addLike = async () => {
+    await blogService.update(blog.id, { ...blog, likes: blog.likes + 1 })
+    blog.likes = blog.likes + 1
+    setLikes(blog.likes)
   }
   
  if (!visible) { 
@@ -27,7 +37,7 @@ const Blog = ({ blog }) => {
   {blog.url}
   <div style={{display: 'flex',alignItems: 'center'}}>
   <p>likes {blog.likes}</p>
-  <button>like</button>
+  <button onClick={addLike}>like</button>
   </div>
   {blog.user.name}
 </div>)  

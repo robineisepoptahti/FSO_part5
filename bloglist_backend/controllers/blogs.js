@@ -56,8 +56,20 @@ const middleware = require('../utils/middleware')
 
 
   notesRouter.put('/:id', async (request, response) => {
-    const res = await Blog.findByIdAndUpdate(request.params.id, request.body,{ new: true })
-    response.json(res)
+    try{
+      const body = request.body
+      const updatedBlog = {
+        title: body.title,
+        author: body.author,
+        url: body.url,
+        likes: body.likes,
+      }
+    const res = await Blog.findByIdAndUpdate(request.params.id, updatedBlog, { new: true })
+    response.json(res)}
+    catch (error) {
+      console.error('Error updating blog:', error)
+      response.status(400).json({ error: 'invalid data' })
+    }
   })
   
   module.exports = notesRouter

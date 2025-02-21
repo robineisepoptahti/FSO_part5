@@ -106,7 +106,6 @@ const App = () => {
   }
 
   const sendBlog = async ({author, title, url}) => {
-    event.preventDefault()
     try {
     const blog = await blogService.create({
       title: title, author: author,url: url
