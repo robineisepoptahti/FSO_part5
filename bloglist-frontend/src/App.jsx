@@ -43,7 +43,7 @@ const ErrorNotification = ({ message }) => {
     return null
   }
   return (
-    <div style={error}>
+    <div style={error} className="error">
       {message}
     </div>
   )
