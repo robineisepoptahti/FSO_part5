@@ -8,7 +8,7 @@ const LoginForm = ({
   handleSubmit
 }) => {
   return (
-    <div>
+    <div data-testid="loginform">
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
         <div>

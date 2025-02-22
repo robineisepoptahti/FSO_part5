@@ -164,8 +164,6 @@ const App = () => {
     return(
       <div>
         <ErrorNotification message={newErrorMessage} />
-
-        <h2>Login</h2>
         <LoginForm
           username={username}
           password={password}
