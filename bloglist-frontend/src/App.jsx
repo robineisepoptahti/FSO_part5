@@ -32,7 +32,7 @@ const Notification = ({ message }) => {
   }
 
   return (
-    <div style={msg}>
+    <div style={msg} className="msg">
       {message}
     </div>
   )

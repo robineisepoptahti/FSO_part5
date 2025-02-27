@@ -21,7 +21,7 @@ const errorHandler = (error, request, response, next) => {
       request.token = authorization.replace('Bearer ', '')
     }
     else {
-      request.token = null;
+      request.token = null
     }
     next()
   }

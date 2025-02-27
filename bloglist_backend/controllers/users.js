@@ -11,12 +11,15 @@ usersRouter.get('/', async (request, response) => {
 usersRouter.post('/', async (request, response) => {
   const { username, name, password } = request.body
   //Adding blog id to array
-  const blog = await Blog.find({})
+  console.log("shit")
+  //const blog = await Blog.find({})
   const blogs = []
-  blogs.push(blog[0]._id)
+  //blogs.push(blog[0]._id)
+  console.log("shittton")
   if (!password || password.length < 3) {
     return response.status(400).json({ error: 'Password must be at least 3 characters long' });
   }
+  console.log("shitshit")
 
   const saltRounds = 10
   const passwordHash = await bcrypt.hash(password, saltRounds)
@@ -26,7 +29,7 @@ usersRouter.post('/', async (request, response) => {
     passwordHash,
     blogs
   })
-
+  console.log("shitfuck")
   const savedUser = await user.save()
   response.status(201).json(savedUser)
 })
