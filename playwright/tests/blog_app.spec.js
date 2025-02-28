@@ -1,4 +1,5 @@
 const { test, expect, beforeEach, describe } = require('@playwright/test')
+const { loginWith, createBlog } = require('./helper')
 
 describe('Blog app', () => {
   beforeEach(async ({ page, request }) => {
@@ -41,7 +42,7 @@ describe('Login', () => {
   })
 
 
-  
+
   describe('When logged in', () => {
 
     beforeEach(async ({ page, request }) => {
@@ -54,19 +55,21 @@ describe('Login', () => {
           }
         })
       await page.goto('http://localhost:5173')
-      await page.getByTestId('username').fill('zervo')
-      await page.getByTestId('password').fill('salainen')
-      await page.getByRole('button', { name: 'login' }).click()
+      loginWith(page, 'zervo', 'salainen')
       })
 
     test('a new blog can be created', async ({ page }) => {
-      await page.getByRole('button', { name: 'create' }).click()
-      await page.getByTestId('author').fill('Kalle')
-      await page.getByTestId('title').fill('Lintukirja')
-      await page.getByTestId('url').fill('www.lintukirja.fi')
-      await page.getByRole('button', { name: 'submit' }).click()
+      createBlog(page, 'Lintukirja', 'Kalle', 'www.lintukirja.fi')
       const msgDiv = await page.locator('.msg')
       await expect(msgDiv).toContainText('a new blog Lintukirja by Kalle added')
-      await expect(page.getByText(`logout`)).toBeVisible()
+      await expect(page.getByText(`Lintukirja Kalle`)).toBeVisible()
     })
+    test ('a blog can be liked', async ({page}) => {
+    createBlog(page, 'Lintukirja', 'Kalle', 'www.lintukirja.fi')
+    await page.getByRole('button', { name: 'view' }).click()
+    await page.getByText('likes 0').waitFor()
+    await page.getByRole('button', { name: 'like' }).click()
+    await page.getByText('likes 1').waitFor()
+    }
+    )
   })
